@@ -123,8 +123,8 @@ Beispiel Body:
 
 ```json
 {
-  "name": "Ahmad",
-  "city": "Hagen"
+  "name": "Andi",
+  "city": "Dortmund"
 }
 ```
 
@@ -144,7 +144,7 @@ Beispiel Body:
 
 ```json
 {
-  "name": "Ahmad Updated",
+  "name": "Andi Updated",
   "city": "Berlin"
 }
 ```
