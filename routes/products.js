@@ -15,8 +15,20 @@ router.get("/", function (request, response) {
 });
 
 router.post("/", function (request, response) {
-    if (!request.body.name || request.body.price === undefined) {
-        return response.status(400).send("Name and price are required");
+    if (!request.body.name || request.body.name.trim() === "") {
+        return response.status(400).send("Product name is required");
+    }
+
+    if (request.body.price === undefined) {
+        return response.status(400).send("Product price is required");
+    }
+
+    if (typeof request.body.price !== "number") {
+        return response.status(400).send("Product price must be a number");
+    }
+
+    if (request.body.price < 0) {
+        return response.status(400).send("Product price must be greater than or equal to 0");
     }
 
     const sql = `
@@ -25,7 +37,7 @@ router.post("/", function (request, response) {
     `;
 
     const values = [
-        request.body.name,
+        request.body.name.trim(),
         request.body.price
     ];
 
@@ -36,7 +48,7 @@ router.post("/", function (request, response) {
 
         const newProduct = {
             id: this.lastID,
-            name: request.body.name,
+            name: request.body.name.trim(),
             price: request.body.price
         };
 
@@ -68,8 +80,20 @@ router.get("/:id", function (request, response) {
 router.put("/:id", function (request, response) {
     const id = Number(request.params.id);
 
-    if (!request.body.name || request.body.price === undefined) {
-        return response.status(400).send("Name and price are required");
+    if (!request.body.name || request.body.name.trim() === "") {
+        return response.status(400).send("Product name is required");
+    }
+
+    if (request.body.price === undefined) {
+        return response.status(400).send("Product price is required");
+    }
+
+    if (typeof request.body.price !== "number") {
+        return response.status(400).send("Product price must be a number");
+    }
+
+    if (request.body.price < 0) {
+        return response.status(400).send("Product price must be greater than or equal to 0");
     }
 
     const sql = `
@@ -79,7 +103,7 @@ router.put("/:id", function (request, response) {
     `;
 
     const values = [
-        request.body.name,
+        request.body.name.trim(),
         request.body.price,
         id
     ];
@@ -95,7 +119,7 @@ router.put("/:id", function (request, response) {
 
         const updatedProduct = {
             id: id,
-            name: request.body.name,
+            name: request.body.name.trim(),
             price: request.body.price
         };
 

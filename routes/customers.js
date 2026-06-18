@@ -15,8 +15,12 @@ router.get("/", function (request, response) {
 });
 
 router.post("/", function (request, response) {
-    if (!request.body.name || !request.body.city) {
-        return response.status(400).send("Name and city are required");
+    if (!request.body.name || request.body.name.trim() === "") {
+        return response.status(400).send("Customer name is required");
+    }
+
+    if (!request.body.city || request.body.city.trim() === "") {
+        return response.status(400).send("Customer city is required");
     }
 
     const sql = `
@@ -25,8 +29,8 @@ router.post("/", function (request, response) {
     `;
 
     const values = [
-        request.body.name,
-        request.body.city
+        request.body.name.trim(),
+        request.body.city.trim()
     ];
 
     database.run(sql, values, function (error) {
@@ -36,8 +40,8 @@ router.post("/", function (request, response) {
 
         const newCustomer = {
             id: this.lastID,
-            name: request.body.name,
-            city: request.body.city
+            name: request.body.name.trim(),
+            city: request.body.city.trim()
         };
 
         response.status(201).json(newCustomer);
@@ -68,8 +72,12 @@ router.get("/:id", function (request, response) {
 router.put("/:id", function (request, response) {
     const id = Number(request.params.id);
 
-    if (!request.body.name || !request.body.city) {
-        return response.status(400).send("Name and city are required");
+    if (!request.body.name || request.body.name.trim() === "") {
+        return response.status(400).send("Customer name is required");
+    }
+
+    if (!request.body.city || request.body.city.trim() === "") {
+        return response.status(400).send("Customer city is required");
     }
 
     const sql = `
@@ -79,8 +87,8 @@ router.put("/:id", function (request, response) {
     `;
 
     const values = [
-        request.body.name,
-        request.body.city,
+        request.body.name.trim(),
+        request.body.city.trim(),
         id
     ];
 
@@ -95,8 +103,8 @@ router.put("/:id", function (request, response) {
 
         const updatedCustomer = {
             id: id,
-            name: request.body.name,
-            city: request.body.city
+            name: request.body.name.trim(),
+            city: request.body.city.trim()
         };
 
         response.status(200).json(updatedCustomer);
