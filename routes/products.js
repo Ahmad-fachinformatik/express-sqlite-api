@@ -4,6 +4,26 @@ const router = express.Router();
 
 const database = require("../database");
 
+function validateProduct(body) {
+    if (!body.name || body.name.trim() === "") {
+        return "Product name is required";
+    }
+
+    if (body.price === undefined) {
+        return "Product price is required";
+    }
+
+    if (typeof body.price !== "number") {
+        return "Product price must be a number";
+    }
+
+    if (body.price < 0) {
+        return "Product price must be greater than or equal to 0";
+    }
+
+    return null;
+}
+
 router.get("/", function (request, response) {
     database.all("SELECT * FROM products", function (error, rows) {
         if (error) {
@@ -15,20 +35,10 @@ router.get("/", function (request, response) {
 });
 
 router.post("/", function (request, response) {
-    if (!request.body.name || request.body.name.trim() === "") {
-        return response.status(400).send("Product name is required");
-    }
+    const validationError = validateProduct(request.body);
 
-    if (request.body.price === undefined) {
-        return response.status(400).send("Product price is required");
-    }
-
-    if (typeof request.body.price !== "number") {
-        return response.status(400).send("Product price must be a number");
-    }
-
-    if (request.body.price < 0) {
-        return response.status(400).send("Product price must be greater than or equal to 0");
+    if (validationError) {
+        return response.status(400).send(validationError);
     }
 
     const sql = `
@@ -80,20 +90,10 @@ router.get("/:id", function (request, response) {
 router.put("/:id", function (request, response) {
     const id = Number(request.params.id);
 
-    if (!request.body.name || request.body.name.trim() === "") {
-        return response.status(400).send("Product name is required");
-    }
+    const validationError = validateProduct(request.body);
 
-    if (request.body.price === undefined) {
-        return response.status(400).send("Product price is required");
-    }
-
-    if (typeof request.body.price !== "number") {
-        return response.status(400).send("Product price must be a number");
-    }
-
-    if (request.body.price < 0) {
-        return response.status(400).send("Product price must be greater than or equal to 0");
+    if (validationError) {
+        return response.status(400).send(validationError);
     }
 
     const sql = `

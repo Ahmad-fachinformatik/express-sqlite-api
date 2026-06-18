@@ -4,6 +4,18 @@ const router = express.Router();
 
 const database = require("../database");
 
+function validateCustomer(body) {
+    if (!body.name || body.name.trim() === "") {
+        return "Customer name is required";
+    }
+
+    if (!body.city || body.city.trim() === "") {
+        return "Customer city is required";
+    }
+
+    return null;
+}
+
 router.get("/", function (request, response) {
     database.all("SELECT * FROM customers", function (error, rows) {
         if (error) {
@@ -15,12 +27,10 @@ router.get("/", function (request, response) {
 });
 
 router.post("/", function (request, response) {
-    if (!request.body.name || request.body.name.trim() === "") {
-        return response.status(400).send("Customer name is required");
-    }
+    const validationError = validateCustomer(request.body);
 
-    if (!request.body.city || request.body.city.trim() === "") {
-        return response.status(400).send("Customer city is required");
+    if (validationError) {
+        return response.status(400).send(validationError);
     }
 
     const sql = `
@@ -72,12 +82,10 @@ router.get("/:id", function (request, response) {
 router.put("/:id", function (request, response) {
     const id = Number(request.params.id);
 
-    if (!request.body.name || request.body.name.trim() === "") {
-        return response.status(400).send("Customer name is required");
-    }
+    const validationError = validateCustomer(request.body);
 
-    if (!request.body.city || request.body.city.trim() === "") {
-        return response.status(400).send("Customer city is required");
+    if (validationError) {
+        return response.status(400).send(validationError);
     }
 
     const sql = `
