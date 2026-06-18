@@ -16,6 +16,18 @@ function validateCustomer(body) {
     return null;
 }
 
+function validateCustomerId(id) {
+    if (isNaN(id)) {
+        return "Invalid customer id";
+    }
+
+    if (id <= 0) {
+        return "Invalid customer id";
+    }
+
+    return null;
+}
+
 router.get("/", function (request, response) {
     database.all("SELECT * FROM customers", function (error, rows) {
         if (error) {
@@ -67,6 +79,14 @@ router.post("/", function (request, response) {
 router.get("/:id", function (request, response) {
     const id = Number(request.params.id);
 
+    const idError = validateCustomerId(id);
+
+    if (idError) {
+        return response.status(400).json({
+            error: idError
+        });
+    }
+
     const sql = `
         SELECT * FROM customers
         WHERE id = ?
@@ -91,6 +111,14 @@ router.get("/:id", function (request, response) {
 
 router.put("/:id", function (request, response) {
     const id = Number(request.params.id);
+
+    const idError = validateCustomerId(id);
+
+    if (idError) {
+        return response.status(400).json({
+            error: idError
+        });
+    }
 
     const validationError = validateCustomer(request.body);
 
@@ -137,6 +165,14 @@ router.put("/:id", function (request, response) {
 
 router.delete("/:id", function (request, response) {
     const id = Number(request.params.id);
+
+    const idError = validateCustomerId(id);
+
+    if (idError) {
+        return response.status(400).json({
+            error: idError
+        });
+    }
 
     const sql = `
         DELETE FROM customers
