@@ -24,6 +24,18 @@ function validateProduct(body) {
     return null;
 }
 
+function validateProductId(id) {
+    if (isNaN(id)) {
+        return "Invalid product id";
+    }
+
+    if (id <= 0) {
+        return "Invalid product id";
+    }
+
+    return null;
+}
+
 router.get("/", function (request, response) {
     database.all("SELECT * FROM products", function (error, rows) {
         if (error) {
@@ -75,6 +87,14 @@ router.post("/", function (request, response) {
 router.get("/:id", function (request, response) {
     const id = Number(request.params.id);
 
+    const idError = validateProductId(id);
+
+    if (idError) {
+        return response.status(400).json({
+            error: idError
+        });
+    }
+
     const sql = `
         SELECT * FROM products
         WHERE id = ?
@@ -99,6 +119,14 @@ router.get("/:id", function (request, response) {
 
 router.put("/:id", function (request, response) {
     const id = Number(request.params.id);
+
+    const idError = validateProductId(id);
+
+    if (idError) {
+        return response.status(400).json({
+            error: idError
+        });
+    }
 
     const validationError = validateProduct(request.body);
 
@@ -145,6 +173,14 @@ router.put("/:id", function (request, response) {
 
 router.delete("/:id", function (request, response) {
     const id = Number(request.params.id);
+
+    const idError = validateProductId(id);
+
+    if (idError) {
+        return response.status(400).json({
+            error: idError
+        });
+    }
 
     const sql = `
         DELETE FROM products
