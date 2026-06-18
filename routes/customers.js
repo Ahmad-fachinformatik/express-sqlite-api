@@ -19,7 +19,9 @@ function validateCustomer(body) {
 router.get("/", function (request, response) {
     database.all("SELECT * FROM customers", function (error, rows) {
         if (error) {
-            return response.status(500).send("Database error");
+            return response.status(500).json({
+                error: "Database error"
+            });
         }
 
         response.status(200).json(rows);
@@ -30,7 +32,9 @@ router.post("/", function (request, response) {
     const validationError = validateCustomer(request.body);
 
     if (validationError) {
-        return response.status(400).send(validationError);
+        return response.status(400).json({
+            error: validationError
+        });
     }
 
     const sql = `
@@ -45,7 +49,9 @@ router.post("/", function (request, response) {
 
     database.run(sql, values, function (error) {
         if (error) {
-            return response.status(500).send("Database error");
+            return response.status(500).json({
+                error: "Database error"
+            });
         }
 
         const newCustomer = {
@@ -68,11 +74,15 @@ router.get("/:id", function (request, response) {
 
     database.get(sql, [id], function (error, row) {
         if (error) {
-            return response.status(500).send("Database error");
+            return response.status(500).json({
+                error: "Database error"
+            });
         }
 
         if (!row) {
-            return response.status(404).send("Customer not found");
+            return response.status(404).json({
+                error: "Customer not found"
+            });
         }
 
         response.status(200).json(row);
@@ -85,7 +95,9 @@ router.put("/:id", function (request, response) {
     const validationError = validateCustomer(request.body);
 
     if (validationError) {
-        return response.status(400).send(validationError);
+        return response.status(400).json({
+            error: validationError
+        });
     }
 
     const sql = `
@@ -102,11 +114,15 @@ router.put("/:id", function (request, response) {
 
     database.run(sql, values, function (error) {
         if (error) {
-            return response.status(500).send("Database error");
+            return response.status(500).json({
+                error: "Database error"
+            });
         }
 
         if (this.changes === 0) {
-            return response.status(404).send("Customer not found");
+            return response.status(404).json({
+                error: "Customer not found"
+            });
         }
 
         const updatedCustomer = {
@@ -129,14 +145,20 @@ router.delete("/:id", function (request, response) {
 
     database.run(sql, [id], function (error) {
         if (error) {
-            return response.status(500).send("Database error");
+            return response.status(500).json({
+                error: "Database error"
+            });
         }
 
         if (this.changes === 0) {
-            return response.status(404).send("Customer not found");
+            return response.status(404).json({
+                error: "Customer not found"
+            });
         }
 
-        response.status(200).send("Customer deleted");
+        response.status(200).json({
+            message: "Customer deleted"
+        });
     });
 });
 
