@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const database = require("./database");
 
 const customersRouter = require("./routes/customers");
@@ -9,6 +11,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 
 app.get("/", function (request, response) {

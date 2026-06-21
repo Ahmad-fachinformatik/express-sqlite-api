@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Express SQLite Frontend</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>My First API Frontend</h1>
+
+        <section>
+            <h2>Customers</h2>
+
+            <input id="customerNameInput" type="text" placeholder="Customer name">
+
+            <input id="customerCityInput" type="text" placeholder="Customer city">
+
+            <button id="addCustomerButton" type="button">
+                Add Customer
+            </button>
+
+            <p id="customerMessage"></p>
+
+            <button id="loadCustomersButton" type="button">
+                Load Customers
+            </button>
+
+            <div id="customersResult"></div>
+        </section>
+
+        <section>
+            <h2>Products</h2>
+
+            <input id="productNameInput" type="text" placeholder="Product name">
+
+            <input id="productPriceInput" type="number" placeholder="Product price">
+
+            <button id="addProductButton" type="button">
+                Add Product
+            </button>
+
+            <p id="productMessage"></p>
+
+            <button id="loadProductsButton" type="button">
+                Load Products
+            </button>
+
+            <div id="productsResult"></div>
+        </section>
+        <script src="script.js"></script>
+    </body>
+</html>
