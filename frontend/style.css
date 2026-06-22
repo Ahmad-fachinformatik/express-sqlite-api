@@ -43,7 +43,7 @@ input {
     border-radius: 5px;
 }
 
-.delete-button:hover {
+.delete-button:hover:not(:disabled) {
     background-color: #a93226;
 }
 
@@ -60,4 +60,10 @@ input {
 .loading-message {
     color: blue;
     font-weight: bold;
+}
+
+.delete-button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
 }
